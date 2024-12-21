@@ -15,12 +15,12 @@ import java.util.ArrayList;
 
 public class CustomeAddapter extends RecyclerView.Adapter<CustomeAddapter.MyViewHolder> {
 
-    private ArrayList<dataMoudle> originalDataset; // Original unfiltered dataset
-    private ArrayList<dataMoudle> filteredDataset; // Dataset used for filtering
+    private ArrayList<dataMoudle> originalDataset;
+    private ArrayList<dataMoudle> filteredDataset;
 
     public CustomeAddapter(ArrayList<dataMoudle> dataset) {
-        this.originalDataset = new ArrayList<>(dataset);
-        this.filteredDataset = dataset; // Initially, both lists are the same
+        this.originalDataset = dataset;
+        this.filteredDataset = new ArrayList<>(dataset);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -37,19 +37,33 @@ public class CustomeAddapter extends RecyclerView.Adapter<CustomeAddapter.MyView
             imageViewIcon = itemView.findViewById(R.id.imageView);
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    dataMoudle clickedItem = filteredDataset.get(position);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    String message = "Name: " + clickedItem.getName() + "\n" +
-                            "Description: " + clickedItem.getDescription();
-                    builder.setTitle("Details")
-                            .setMessage(message)
-                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                            .show();
-                }
-            });
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        dataMoudle clickedItem = filteredDataset.get(position);
+
+
+                        LayoutInflater inflater = LayoutInflater.from(v.getContext());
+                        View dialogView = inflater.inflate(R.layout.custom_alert_dialog, null);
+
+
+                        ImageView imageView = dialogView.findViewById(R.id.imageView_alert_dialog); // Set ID in custom layout
+                        TextView textViewName = dialogView.findViewById(R.id.textView_name_alert_dialog); // Set ID in custom layout
+                        TextView textViewDescription = dialogView.findViewById(R.id.textView_description_alert_dialog); // Set ID in custom layout
+
+                        imageView.setImageResource(clickedItem.getImage());
+                        textViewName.setText(clickedItem.getName());
+                        textViewDescription.setText(clickedItem.getDescription());
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(dialogView)
+                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                .show();
+
+                    }
+                });
+            }
         }
-    }
 
     @NonNull
     @Override
@@ -74,27 +88,23 @@ public class CustomeAddapter extends RecyclerView.Adapter<CustomeAddapter.MyView
         return filteredDataset.size();
     }
 
-    /**
-     * Updates the dataset to display only items that match the search query.
-     *
-     * @param query The search query.
-     */
+
     public void filter(String query) {
-        filteredDataset = new ArrayList<>();
+        filteredDataset.clear();
+
         if (query == null || query.isEmpty()) {
-            // If query is empty, show all items
-            filteredDataset.addAll(originalDataset);
+            filteredDataset.addAll(originalDataset); // Add all original items
         } else {
-            // Filter items that contain the query (case-insensitive)
-            String lowerCaseQuery = query.toLowerCase();
+            String lowerCaseQuery = query.trim().toLowerCase(); // Trim spaces!
             for (dataMoudle item : originalDataset) {
-                if (item.getName().toLowerCase().contains(lowerCaseQuery) ||
-                        item.getDescription().toLowerCase().contains(lowerCaseQuery)) {
+                String itemName = item.getName().trim().toLowerCase(); // Trim spaces!
+
+
+                if (itemName.contains(lowerCaseQuery) ) {
                     filteredDataset.add(item);
                 }
             }
         }
-        // Notify the adapter to update the RecyclerView
         notifyDataSetChanged();
     }
 }

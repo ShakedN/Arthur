@@ -9,7 +9,7 @@ public class dataMoudle {
     public dataMoudle(String name, String description, int image, int id) {
         this.name = name;
         this.description = description;
-        this.image = image;  // Correctly assign the integer to 'image'
+        this.image = image;
         this.id = id;
     }
 

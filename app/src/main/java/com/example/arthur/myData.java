@@ -4,7 +4,7 @@ public class myData {
 
 
 
-    static String[] nameArray = {"Arthur", "Buster", "Binky", "Alan", "Prunella", "Prunella", "Fren", "Gilly", "Muffy", "Pal"};
+    static String[] nameArray = {"Arthur", "Buster", "Binky", "Alan", "Prunella", "Francine", "Fren", "Gilly", "Muffy", "Pal"};
 
     static String[] description = {"Arthur is a curious and intelligent 8-year-old aardvark who loves adventures and solving problems.", "Buster is Arthur’s best friend, a fun-loving, imaginative rabbit who enjoys exploring the world.",
             "Binky is a tough, yet kind-hearted bulldog who learns over time to be more gentle", "Alan is Arthur’s intelligent friend, a studious bear who often provides solutions to problems."
